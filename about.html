@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Saturday Bakehouse</title>
+  <meta name="description" content="The story behind Saturday Bakehouse: a small-batch weekend bakery focused on real ingredients, slow ferments, and neighborly service." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <span class="brand__mark" aria-hidden="true">🥐</span>
+        <span class="brand__name">Saturday Bakehouse<small>Fresh every Saturday</small></span>
+      </a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation menu">
+        <span class="nav__toggle-bar" aria-hidden="true"></span>
+      </button>
+      <ul class="nav__menu" id="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="about.html" aria-current="page">About</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a class="nav__cta" href="order.html">Order</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="page-header">
+      <div class="container">
+        <h1>Our Story</h1>
+        <p>A one-day-a-week bakery built on slow ferments, simple ingredients, and a love of feeding the neighborhood.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container" style="max-width: 760px;">
+        <!-- TODO(owner): replace with your real story -->
+        <p class="lead">
+          Saturday Bakehouse started as a home kitchen experiment — one sourdough
+          starter, a borrowed Dutch oven, and far too many loaves to eat alone.
+          Word spread down the block, and Saturdays became baking days.
+        </p>
+        <p>
+          Today we still bake just once a week, on purpose. Baking a single day
+          lets us do it properly: long overnight ferments, dough shaped by hand,
+          and everything pulled from the oven that same morning. Nothing sits
+          around. What we bake Saturday, we sell Saturday.
+        </p>
+        <h2>What we believe</h2>
+        <div class="grid grid--3" style="margin-top: 1rem;">
+          <article class="card">
+            <div class="card__media" aria-hidden="true">🌾</div>
+            <h3>Real ingredients</h3>
+            <p>Unbleached flour, good butter, real fruit and chocolate. No shortcuts, no fillers.</p>
+          </article>
+          <article class="card">
+            <div class="card__media" aria-hidden="true">⏳</div>
+            <h3>Slow &amp; small-batch</h3>
+            <p>Time is an ingredient. Long ferments build flavor you can't rush.</p>
+          </article>
+          <article class="card">
+            <div class="card__media" aria-hidden="true">🤝</div>
+            <h3>Neighborly</h3>
+            <p>We bake for the people down the street. We learn your name and your usual.</p>
+          </article>
+        </div>
+
+        <h2 style="margin-top: 2.5rem;">The bakers</h2>
+        <p>
+          <!-- TODO(owner): real team bio -->
+          We're a tiny team of weekend bakers who care a lot about crust. Come say
+          hello at the counter — we're always happy to talk bread.
+        </p>
+
+        <p style="margin-top: 2rem;">
+          <a class="btn btn--primary" href="order.html">Order for pickup</a>
+          <a class="btn btn--ghost" href="faq.html">Read the FAQ</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>Saturday Bakehouse</h4>
+        <p>Small-batch breads, pastries, and cookies baked fresh every Saturday. Order ahead for weekend pickup.</p>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li>Saturdays, 8 AM – 1 PM</li>
+          <li>123 Baker Street</li>
+          <li>Your Town, ST 00000</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+15555550123">(555) 555-0123</a></li>
+          <li><a href="mailto:hello@example.com">hello@example.com</a></li>
+          <li><a href="order.html">Place an order</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">© <span id="year">2026</span> Saturday Bakehouse. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

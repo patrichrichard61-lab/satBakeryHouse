@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saturday Bakehouse — Fresh baked goods, every Saturday</title>
+  <meta name="description" content="Saturday Bakehouse: small-batch breads, pastries, and cookies baked fresh every Saturday. Order for weekend pickup." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===== Shared header (keep identical across pages) ===== -->
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <span class="brand__mark" aria-hidden="true">🥐</span>
+        <span class="brand__name">Saturday Bakehouse<small>Fresh every Saturday</small></span>
+      </a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation menu">
+        <span class="nav__toggle-bar" aria-hidden="true"></span>
+      </button>
+      <ul class="nav__menu" id="nav-menu">
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a class="nav__cta" href="order.html">Order</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <div>
+          <p class="eyebrow">Small-batch neighborhood bakery</p>
+          <h1>Fresh bread &amp; pastries, baked every Saturday.</h1>
+          <p class="lead">
+            We bake in small batches through the night and open our doors at
+            sunrise. Reserve your favorites for weekend pickup — no account
+            needed.
+          </p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="order.html">Order for pickup</a>
+            <a class="btn btn--ghost" href="menu.html">See the menu</a>
+          </div>
+        </div>
+        <div class="hero__art" aria-hidden="true">🍞</div>
+      </div>
+    </section>
+
+    <!-- ===== Hours / location strip ===== -->
+    <section class="section">
+      <div class="container">
+        <div class="info-strip">
+          <div class="info-strip__item">
+            <h3>Open Saturdays</h3>
+            <!-- TODO(owner): confirm hours -->
+            <p>8:00 AM – 1:00 PM<br />(or until we sell out)</p>
+          </div>
+          <div class="info-strip__item">
+            <h3>Find us</h3>
+            <!-- TODO(owner): real address -->
+            <p>123 Baker Street<br />Your Town, ST 00000</p>
+          </div>
+          <div class="info-strip__item">
+            <h3>Say hello</h3>
+            <!-- TODO(owner): real phone/email -->
+            <p><a href="tel:+15555550123">(555) 555-0123</a><br /><a href="mailto:hello@example.com">hello@example.com</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Featured items ===== -->
+    <section class="section section--tint">
+      <div class="container">
+        <p class="eyebrow">This week's favorites</p>
+        <h2>Freshly out of the oven</h2>
+        <div class="grid grid--3" style="margin-top: 1.5rem;">
+          <article class="card">
+            <div class="card__media" aria-hidden="true">🥖</div>
+            <h3>Country Sourdough</h3>
+            <p>Naturally leavened, 24-hour ferment, crackling crust and an open, tangy crumb.</p>
+            <p><strong>$8</strong></p>
+          </article>
+          <article class="card">
+            <div class="card__media" aria-hidden="true">🥐</div>
+            <h3>Butter Croissant</h3>
+            <p>Laminated with European-style butter for shatteringly flaky layers.</p>
+            <p><strong>$4</strong></p>
+          </article>
+          <article class="card">
+            <div class="card__media" aria-hidden="true">🍪</div>
+            <h3>Brown Butter Chocolate Chip</h3>
+            <p>Sea-salt finished, crisp edges, gooey middle. A weekend staple.</p>
+            <p><strong>$3</strong></p>
+          </article>
+        </div>
+        <p class="text-center" style="margin-top: 2rem;">
+          <a class="btn btn--accent" href="menu.html">View the full menu</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="section">
+      <div class="container text-center">
+        <h2>Reserve yours before we sell out</h2>
+        <p class="lead center-block">
+          Popular items go fast. Place a pickup order and we'll have it bagged
+          and ready when you arrive Saturday morning.
+        </p>
+        <p style="margin-top: 1.5rem;">
+          <a class="btn btn--primary" href="order.html">Start your order</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Shared footer (keep identical across pages) ===== -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>Saturday Bakehouse</h4>
+        <p>Small-batch breads, pastries, and cookies baked fresh every Saturday. Order ahead for weekend pickup.</p>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <!-- TODO(owner): real hours & address -->
+          <li>Saturdays, 8 AM – 1 PM</li>
+          <li>123 Baker Street</li>
+          <li>Your Town, ST 00000</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <!-- TODO(owner): real phone/email/social -->
+          <li><a href="tel:+15555550123">(555) 555-0123</a></li>
+          <li><a href="mailto:hello@example.com">hello@example.com</a></li>
+          <li><a href="order.html">Place an order</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">© <span id="year">2026</span> Saturday Bakehouse. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

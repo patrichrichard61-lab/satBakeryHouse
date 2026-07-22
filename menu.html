@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu — Saturday Bakehouse</title>
+  <meta name="description" content="Our weekly menu: sourdough and specialty breads, laminated pastries, cookies, and seasonal bakes. Prices and dietary tags included." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <span class="brand__mark" aria-hidden="true">🥐</span>
+        <span class="brand__name">Saturday Bakehouse<small>Fresh every Saturday</small></span>
+      </a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation menu">
+        <span class="nav__toggle-bar" aria-hidden="true"></span>
+      </button>
+      <ul class="nav__menu" id="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html" aria-current="page">Menu</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a class="nav__cta" href="order.html">Order</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="page-header">
+      <div class="container">
+        <h1>The Menu</h1>
+        <p>Baked fresh every Saturday in small batches. Availability varies week to week and popular items sell out — order ahead to be sure.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <p class="fallback-note" style="margin-top:0;">
+          <span class="tag tag--v">V</span> Vegetarian
+          &nbsp; <span class="tag tag--gf">GF</span> Gluten-free option
+          &nbsp; — <!-- TODO(owner): confirm allergen details on request -->
+          Made in a kitchen that handles wheat, eggs, dairy, and nuts.
+        </p>
+
+        <!-- Breads -->
+        <div class="menu-category">
+          <h2>Breads</h2>
+          <ul class="menu-list">
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Country Sourdough</h3>
+                <span class="menu-item__price">$8</span>
+              </div>
+              <p class="menu-item__desc">Naturally leavened with a 24-hour ferment. Crackling crust, tangy open crumb.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Seeded Whole Wheat</h3>
+                <span class="menu-item__price">$8</span>
+              </div>
+              <p class="menu-item__desc">Stone-ground wheat topped with sunflower, flax, and sesame. Hearty and soft.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Rosemary Focaccia</h3>
+                <span class="menu-item__price">$7</span>
+              </div>
+              <p class="menu-item__desc">Olive-oil rich, dimpled and golden, finished with flaky salt and rosemary.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Baguette</h3>
+                <span class="menu-item__price">$4</span>
+              </div>
+              <p class="menu-item__desc">Thin, crisp crust and a light, airy interior. Best the day you buy it.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pastries -->
+        <div class="menu-category">
+          <h2>Pastries</h2>
+          <ul class="menu-list">
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Butter Croissant</h3>
+                <span class="menu-item__price">$4</span>
+              </div>
+              <p class="menu-item__desc">Laminated with European-style butter for shatteringly flaky layers.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Pain au Chocolat</h3>
+                <span class="menu-item__price">$4.50</span>
+              </div>
+              <p class="menu-item__desc">Two batons of dark chocolate folded into buttery laminated dough.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Almond Croissant</h3>
+                <span class="menu-item__price">$5</span>
+              </div>
+              <p class="menu-item__desc">Filled with almond cream, topped with sliced almonds and powdered sugar.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Cinnamon Morning Bun</h3>
+                <span class="menu-item__price">$4.50</span>
+              </div>
+              <p class="menu-item__desc">Croissant dough rolled with cinnamon sugar and caramelized in the pan.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Cookies & sweets -->
+        <div class="menu-category">
+          <h2>Cookies &amp; Sweets</h2>
+          <ul class="menu-list">
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Brown Butter Chocolate Chip</h3>
+                <span class="menu-item__price">$3</span>
+              </div>
+              <p class="menu-item__desc">Sea-salt finished with crisp edges and a gooey middle.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Oatmeal Cranberry</h3>
+                <span class="menu-item__price">$3</span>
+              </div>
+              <p class="menu-item__desc">Chewy oats, tart dried cranberries, a hint of orange zest.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Flourless Chocolate Cookie</h3>
+                <span class="menu-item__price">$3.50</span>
+              </div>
+              <p class="menu-item__desc">Deeply fudgy, crackle-topped, naturally gluten-free.</p>
+              <span class="tag tag--gf">GF</span> <span class="tag tag--v">V</span>
+            </li>
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Lemon Blueberry Muffin</h3>
+                <span class="menu-item__price">$3.50</span>
+              </div>
+              <p class="menu-item__desc">Bursting with blueberries and brightened with fresh lemon zest.</p>
+              <span class="tag tag--v">V</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Seasonal -->
+        <div class="menu-category">
+          <h2>Seasonal Specials</h2>
+          <ul class="menu-list">
+            <li class="menu-item">
+              <div class="menu-item__head">
+                <h3 class="menu-item__name">Ask us this week!</h3>
+                <span class="menu-item__price">—</span>
+              </div>
+              <p class="menu-item__desc">
+                <!-- TODO(owner): rotate seasonal items here -->
+                We bake a rotating special each week — think stone-fruit galettes in
+                summer and pumpkin loaves in fall. Follow along or ask at pickup.
+              </p>
+            </li>
+          </ul>
+        </div>
+
+        <p class="text-center" style="margin-top: 2.5rem;">
+          <a class="btn btn--primary" href="order.html">Order for Saturday pickup</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>Saturday Bakehouse</h4>
+        <p>Small-batch breads, pastries, and cookies baked fresh every Saturday. Order ahead for weekend pickup.</p>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li>Saturdays, 8 AM – 1 PM</li>
+          <li>123 Baker Street</li>
+          <li>Your Town, ST 00000</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+15555550123">(555) 555-0123</a></li>
+          <li><a href="mailto:hello@example.com">hello@example.com</a></li>
+          <li><a href="order.html">Place an order</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">© <span id="year">2026</span> Saturday Bakehouse. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

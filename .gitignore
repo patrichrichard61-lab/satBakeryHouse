@@ -216,3 +216,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---- Web / static site ----
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.local
+.vscode/
+.idea/

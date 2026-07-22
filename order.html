@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order for Pickup — Saturday Bakehouse</title>
+  <meta name="description" content="Reserve your favorites for Saturday pickup. Fill in your details, choose your items, and we'll have your order ready." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <span class="brand__mark" aria-hidden="true">🥐</span>
+        <span class="brand__name">Saturday Bakehouse<small>Fresh every Saturday</small></span>
+      </a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation menu">
+        <span class="nav__toggle-bar" aria-hidden="true"></span>
+      </button>
+      <ul class="nav__menu" id="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a class="nav__cta" href="order.html" aria-current="page">Order</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="page-header">
+      <div class="container">
+        <h1>Order for Pickup</h1>
+        <p>No account needed. Tell us who you are, pick your items, and choose a Saturday — we'll bag it up and have it ready at the counter.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container" style="max-width: 780px;">
+        <form id="order-form" class="form" novalidate>
+          <!-- Contact details -->
+          <fieldset>
+            <legend>Your details</legend>
+            <div class="form__row form__row--2">
+              <div class="field">
+                <label for="name">Name <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="name" name="name" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="phone">Phone <span class="req" aria-hidden="true">*</span></label>
+                <input type="tel" id="phone" name="phone" autocomplete="tel" required />
+              </div>
+            </div>
+            <div class="form__row form__row--2">
+              <div class="field">
+                <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+                <input type="email" id="email" name="email" autocomplete="email" required />
+              </div>
+              <div class="field">
+                <label for="pickup_date">Pickup Saturday <span class="req" aria-hidden="true">*</span></label>
+                <input type="date" id="pickup_date" name="pickup_date" required />
+                <span class="field__hint">We bake Saturdays only. Please choose an upcoming Saturday.</span>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Items -->
+          <fieldset>
+            <legend>Choose your items</legend>
+            <span class="field__hint">Set a quantity for anything you'd like. Leave the rest at 0.</span>
+
+            <div style="margin-top: 1rem;">
+              <div class="order-line">
+                <label class="order-line__label" for="q-sourdough">Country Sourdough <span class="order-line__meta">— $8</span></label>
+                <input class="order-line__qty" id="q-sourdough" name="Country Sourdough" data-item="Country Sourdough ($8)" type="number" min="0" max="20" step="1" value="0" inputmode="numeric" />
+              </div>
+              <div class="order-line">
+                <label class="order-line__label" for="q-wheat">Seeded Whole Wheat <span class="order-line__meta">— $8</span></label>
+                <input class="order-line__qty" id="q-wheat" name="Seeded Whole Wheat" data-item="Seeded Whole Wheat ($8)" type="number" min="0" max="20" step="1" value="0" inputmode="numeric" />
+              </div>
+              <div class="order-line">
+                <label class="order-line__label" for="q-focaccia">Rosemary Focaccia <span class="order-line__meta">— $7</span></label>
+                <input class="order-line__qty" id="q-focaccia" name="Rosemary Focaccia" data-item="Rosemary Focaccia ($7)" type="number" min="0" max="20" step="1" value="0" inputmode="numeric" />
+              </div>
+              <div class="order-line">
+                <label class="order-line__label" for="q-croissant">Butter Croissant <span class="order-line__meta">— $4</span></label>
+                <input class="order-line__qty" id="q-croissant" name="Butter Croissant" data-item="Butter Croissant ($4)" type="number" min="0" max="40" step="1" value="0" inputmode="numeric" />
+              </div>
+              <div class="order-line">
+                <label class="order-line__label" for="q-pac">Pain au Chocolat <span class="order-line__meta">— $4.50</span></label>
+                <input class="order-line__qty" id="q-pac" name="Pain au Chocolat" data-item="Pain au Chocolat ($4.50)" type="number" min="0" max="40" step="1" value="0" inputmode="numeric" />
+              </div>
+              <div class="order-line">
+                <label class="order-line__label" for="q-cookie">Brown Butter Chocolate Chip Cookie <span class="order-line__meta">— $3</span></label>
+                <input class="order-line__qty" id="q-cookie" name="Brown Butter Chocolate Chip Cookie" data-item="Brown Butter Choc Chip Cookie ($3)" type="number" min="0" max="60" step="1" value="0" inputmode="numeric" />
+              </div>
+              <div class="order-line">
+                <label class="order-line__label" for="q-muffin">Lemon Blueberry Muffin <span class="order-line__meta">— $3.50</span></label>
+                <input class="order-line__qty" id="q-muffin" name="Lemon Blueberry Muffin" data-item="Lemon Blueberry Muffin ($3.50)" type="number" min="0" max="40" step="1" value="0" inputmode="numeric" />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Notes -->
+          <div class="field">
+            <label for="notes">Notes (allergies, special requests, seasonal specials)</label>
+            <textarea id="notes" name="notes"></textarea>
+          </div>
+
+          <div class="form__actions">
+            <button class="btn btn--primary" type="submit">Place pickup order</button>
+            <a class="btn btn--ghost" id="email-fallback" data-to="orders@example.com" href="mailto:orders@example.com">Email this order instead</a>
+          </div>
+
+          <!-- Live region for validation / success messages -->
+          <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+
+          <p class="fallback-note">
+            Prefer to talk to us? Call <a href="tel:+15555550123">(555) 555-0123</a>.
+            <!-- TODO(owner): confirm phone / order email above and in js/main.js -->
+            Orders are confirmed by phone or email — payment is taken at pickup.
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>Saturday Bakehouse</h4>
+        <p>Small-batch breads, pastries, and cookies baked fresh every Saturday. Order ahead for weekend pickup.</p>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li>Saturdays, 8 AM – 1 PM</li>
+          <li>123 Baker Street</li>
+          <li>Your Town, ST 00000</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+15555550123">(555) 555-0123</a></li>
+          <li><a href="mailto:hello@example.com">hello@example.com</a></li>
+          <li><a href="order.html">Place an order</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">© <span id="year">2026</span> Saturday Bakehouse. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

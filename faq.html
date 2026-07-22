@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ — Saturday Bakehouse</title>
+  <meta name="description" content="Frequently asked questions about ordering, pickup times, lead time, dietary options, payment, and allergens at Saturday Bakehouse." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <span class="brand__mark" aria-hidden="true">🥐</span>
+        <span class="brand__name">Saturday Bakehouse<small>Fresh every Saturday</small></span>
+      </a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation menu">
+        <span class="nav__toggle-bar" aria-hidden="true"></span>
+      </button>
+      <ul class="nav__menu" id="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html" aria-current="page">FAQ</a></li>
+        <li><a class="nav__cta" href="order.html">Order</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="page-header">
+      <div class="container">
+        <h1>Frequently Asked Questions</h1>
+        <p>Everything you need to know about ordering and picking up. Still curious? Give us a call or drop by the counter.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container" style="max-width: 780px;">
+        <details class="faq-item" open>
+          <summary>When can I pick up my order?</summary>
+          <div class="faq-item__body">
+            <!-- TODO(owner): confirm hours -->
+            We're open for pickup on <strong>Saturdays, 8:00 AM–1:00 PM</strong>,
+            or until we sell out. Choose your Saturday when you place your order.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Do I need an account to order?</summary>
+          <div class="faq-item__body">
+            No accounts, no passwords. Just fill in the
+            <a href="order.html">order form</a> with your name, contact info, and
+            items. We'll confirm by phone or email.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How far ahead do I need to order?</summary>
+          <div class="faq-item__body">
+            <!-- TODO(owner): confirm cutoff -->
+            Please place pickup orders by <strong>Thursday evening</strong> for that
+            Saturday. We bake to order in small batches, so earlier is safer for
+            popular items. Walk-ins are welcome too, while supplies last.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How and when do I pay?</summary>
+          <div class="faq-item__body">
+            <!-- TODO(owner): confirm accepted payment -->
+            Payment is taken <strong>at pickup</strong> — no prepayment needed. We
+            accept cash and major cards.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Do you have vegetarian or gluten-free options?</summary>
+          <div class="faq-item__body">
+            Most of our menu is vegetarian, and we mark items with
+            <span class="tag tag--v">V</span> (vegetarian) and
+            <span class="tag tag--gf">GF</span> (gluten-free) on the
+            <a href="menu.html">menu</a>. Our Flourless Chocolate Cookie is a
+            reliable gluten-free favorite.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What about allergens?</summary>
+          <div class="faq-item__body">
+            <!-- TODO(owner): confirm allergen statement -->
+            Our kitchen handles wheat, eggs, dairy, and nuts, so we can't guarantee
+            any item is fully free of cross-contact. If you have a serious allergy,
+            note it on your order or call us and we'll help you choose.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Can I change or cancel my order?</summary>
+          <div class="faq-item__body">
+            Of course — just reply to your confirmation or call us before the
+            Thursday cutoff and we'll sort it out.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Do you cater or take large orders?</summary>
+          <div class="faq-item__body">
+            <!-- TODO(owner): confirm catering policy -->
+            We love a big order! For events or bulk quantities, reach out a week
+            ahead at <a href="mailto:hello@example.com">hello@example.com</a> so we
+            can plan the bake.
+          </div>
+        </details>
+
+        <p class="text-center" style="margin-top: 2.5rem;">
+          <a class="btn btn--primary" href="order.html">Ready? Place your order</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>Saturday Bakehouse</h4>
+        <p>Small-batch breads, pastries, and cookies baked fresh every Saturday. Order ahead for weekend pickup.</p>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li>Saturdays, 8 AM – 1 PM</li>
+          <li>123 Baker Street</li>
+          <li>Your Town, ST 00000</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+15555550123">(555) 555-0123</a></li>
+          <li><a href="mailto:hello@example.com">hello@example.com</a></li>
+          <li><a href="order.html">Place an order</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">© <span id="year">2026</span> Saturday Bakehouse. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
