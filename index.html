@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Language Tracker</title>
+  <style>
+    :root {
+      --cream: #fbf7ec;
+      --card: #fffdf8;
+      --green: #3ddc84;
+      --green-deep: #2fbf6f;
+      --green-ink: #1f3d2b;
+      --ink: #2a3b30;
+      --muted: #6f8377;
+      --track: #eae3d2;
+      --shadow: 0 10px 30px rgba(47, 191, 111, 0.10), 0 2px 8px rgba(31, 61, 43, 0.05);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      padding: 40px 20px 72px;
+    }
+
+    .wrap {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--green-ink);
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      margin: 0 0 4px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--green-ink);
+    }
+
+    .card .sub {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Streak */
+    .streak-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .streak-figure {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .streak-number {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--green-deep);
+      line-height: 1;
+    }
+
+    .streak-unit {
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 999px;
+      transition: transform 0.12s ease, background 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #0f2a1b;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 13px 22px;
+      box-shadow: 0 6px 16px rgba(61, 220, 132, 0.35);
+    }
+
+    .btn-primary:hover { background: var(--green-deep); transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-primary:disabled {
+      background: var(--track);
+      color: var(--muted);
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .done-note {
+      color: var(--green-deep);
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Progress bars */
+    .progress {
+      margin-top: 22px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+    }
+
+    .progress-label { color: var(--muted); font-weight: 600; }
+    .progress-count { color: var(--green-ink); font-weight: 700; }
+
+    .track {
+      background: var(--track);
+      border-radius: 999px;
+      height: 12px;
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--green-deep));
+      border-radius: 999px;
+      width: 0;
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Word input */
+    .word-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .word-form input {
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 12px 16px;
+      border: 1.5px solid var(--track);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      min-width: 0;
+    }
+
+    .word-form input:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(61, 220, 132, 0.18);
+    }
+
+    #word-input { flex: 2 1 160px; }
+    #meaning-input { flex: 1 1 120px; }
+
+    .word-form button {
+      background: var(--green-ink);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      width: 48px;
+      height: 48px;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .word-form button:hover { background: #16301f; }
+
+    ul.words {
+      list-style: none;
+      margin: 20px 0 0;
+      padding: 0;
+    }
+
+    ul.words li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 4px 12px 2px;
+      border-bottom: 1px solid var(--track);
+    }
+
+    ul.words li:last-child { border-bottom: none; }
+
+    .word-text {
+      font-weight: 700;
+      color: var(--green-ink);
+    }
+
+    .word-meaning {
+      color: var(--muted);
+      font-weight: 400;
+      font-size: 0.92rem;
+    }
+
+    .word-when {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .word-body { min-width: 0; }
+
+    .remove {
+      background: transparent;
+      color: var(--muted);
+      font-size: 1.2rem;
+      width: 34px;
+      height: 34px;
+      line-height: 1;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .remove:hover { background: #f6ede0; color: #c0563e; }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+      padding: 24px 0 8px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 28px 14px 56px; }
+      .card { padding: 22px; }
+      .streak-number { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Language Tracker</h1>
+      <p>Small steps, every day.</p>
+    </header>
+
+    <!-- Streak -->
+    <section class="card">
+      <h2>Study streak</h2>
+      <p class="sub">Keep the chain going — one study day at a time.</p>
+      <div class="streak-row">
+        <div class="streak-figure">
+          <span class="streak-number" id="streak-number">0</span>
+          <span class="streak-unit" id="streak-unit">days</span>
+        </div>
+        <div id="streak-action"></div>
+      </div>
+      <div class="progress">
+        <div class="progress-head">
+          <span class="progress-label">This week</span>
+          <span class="progress-count"><span id="week-days">0</span> / 7 days</span>
+        </div>
+        <div class="track"><div class="fill" id="streak-fill"></div></div>
+      </div>
+    </section>
+
+    <!-- Words -->
+    <section class="card">
+      <h2>New words this week</h2>
+      <p class="sub">Goal: 20 new words each week. Resets every Monday.</p>
+      <form class="word-form" id="word-form">
+        <input type="text" id="word-input" placeholder="New word" autocomplete="off" />
+        <input type="text" id="meaning-input" placeholder="Meaning (optional)" autocomplete="off" />
+        <button type="submit" title="Add word" aria-label="Add word">+</button>
+      </form>
+      <div class="progress">
+        <div class="progress-head">
+          <span class="progress-label">Weekly goal</span>
+          <span class="progress-count"><span id="week-words">0</span> / 20 words</span>
+        </div>
+        <div class="track"><div class="fill" id="words-fill"></div></div>
+      </div>
+      <ul class="words" id="word-list"></ul>
+      <div class="empty" id="word-empty">No words yet — add your first!</div>
+    </section>
+
+    <footer>Everything is saved privately in your browser. No account needed.</footer>
+  </div>
+
+  <script>
+    "use strict";
+
+    var STORAGE_KEY = "langTracker";
+    var WEEKLY_WORD_GOAL = 20;
+    var WEEK_DAYS = 7;
+
+    /* ---------- date helpers ---------- */
+    function todayStr() {
+      return dateStr(new Date());
+    }
+
+    function dateStr(d) {
+      var y = d.getFullYear();
+      var m = String(d.getMonth() + 1).padStart(2, "0");
+      var day = String(d.getDate()).padStart(2, "0");
+      return y + "-" + m + "-" + day;
+    }
+
+    function parseDate(str) {
+      var p = str.split("-");
+      return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    }
+
+    // Difference in whole calendar days between two YYYY-MM-DD strings (a - b).
+    function dayDiff(a, b) {
+      var da = parseDate(a);
+      var db = parseDate(b);
+      return Math.round((da - db) / 86400000);
+    }
+
+    // Monday as the start of the week.
+    function startOfWeek(d) {
+      var copy = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      var day = copy.getDay(); // 0 = Sun ... 6 = Sat
+      var diff = (day === 0 ? -6 : 1 - day); // shift back to Monday
+      copy.setDate(copy.getDate() + diff);
+      return copy;
+    }
+
+    function isThisWeek(dateOrStr) {
+      var d = typeof dateOrStr === "string" ? parseDate(dateOrStr) : dateOrStr;
+      var weekStart = startOfWeek(new Date());
+      var weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekEnd.getDate() + 7);
+      return d >= weekStart && d < weekEnd;
+    }
+
+    function relativeWhen(iso) {
+      var then = new Date(iso);
+      var diff = dayDiff(todayStr(), dateStr(then));
+      if (diff <= 0) return "Today";
+      if (diff === 1) return "Yesterday";
+      if (diff < 7) return diff + " days ago";
+      return then.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    }
+
+    /* ---------- state ---------- */
+    function defaultState() {
+      return { streak: 0, lastStudyDate: null, studyDates: [], words: [] };
+    }
+
+    function load() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
+        var s = JSON.parse(raw);
+        return {
+          streak: typeof s.streak === "number" ? s.streak : 0,
+          lastStudyDate: s.lastStudyDate || null,
+          studyDates: Array.isArray(s.studyDates) ? s.studyDates : [],
+          words: Array.isArray(s.words) ? s.words : []
+        };
+      } catch (e) {
+        return defaultState();
+      }
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    var state = load();
+
+    /* ---------- derived values ---------- */
+    function studiedToday() {
+      return state.lastStudyDate === todayStr();
+    }
+
+    function weekStudyDays() {
+      var seen = {};
+      state.studyDates.forEach(function (d) {
+        if (isThisWeek(d)) seen[d] = true;
+      });
+      return Object.keys(seen).length;
+    }
+
+    function weekWordCount() {
+      return state.words.filter(function (w) {
+        return isThisWeek(new Date(w.addedAt));
+      }).length;
+    }
+
+    /* ---------- actions ---------- */
+    function markStudiedToday() {
+      var today = todayStr();
+      if (state.lastStudyDate === today) return; // already marked
+
+      if (state.lastStudyDate && dayDiff(today, state.lastStudyDate) === 1) {
+        state.streak += 1; // consecutive day
+      } else {
+        state.streak = 1; // first day or streak broken
+      }
+      state.lastStudyDate = today;
+      if (state.studyDates.indexOf(today) === -1) {
+        state.studyDates.push(today);
+      }
+      // Keep studyDates from growing forever: retain only the last ~120 days.
+      if (state.studyDates.length > 200) {
+        state.studyDates = state.studyDates.slice(-200);
+      }
+      save();
+      render();
+    }
+
+    function addWord(text, meaning) {
+      text = text.trim();
+      if (!text) return;
+      state.words.push({
+        text: text,
+        meaning: meaning.trim(),
+        addedAt: new Date().toISOString()
+      });
+      save();
+      render();
+    }
+
+    function removeWord(index) {
+      state.words.splice(index, 1);
+      save();
+      render();
+    }
+
+    /* ---------- streak-break reconciliation ----------
+       If the user opens the app after missing a day, the displayed streak
+       should reflect reality: a streak only counts if today or yesterday
+       was studied. Otherwise it has lapsed and reads as 0 until they log again. */
+    function displayStreak() {
+      if (!state.lastStudyDate) return 0;
+      var gap = dayDiff(todayStr(), state.lastStudyDate);
+      if (gap <= 1) return state.streak; // today or yesterday
+      return 0; // lapsed
+    }
+
+    /* ---------- render ---------- */
+    var el = {
+      streakNumber: document.getElementById("streak-number"),
+      streakUnit: document.getElementById("streak-unit"),
+      streakAction: document.getElementById("streak-action"),
+      weekDays: document.getElementById("week-days"),
+      streakFill: document.getElementById("streak-fill"),
+      weekWords: document.getElementById("week-words"),
+      wordsFill: document.getElementById("words-fill"),
+      wordList: document.getElementById("word-list"),
+      wordEmpty: document.getElementById("word-empty")
+    };
+
+    function render() {
+      // Streak figure
+      var shown = displayStreak();
+      el.streakNumber.textContent = shown;
+      el.streakUnit.textContent = shown === 1 ? "day" : "days";
+
+      // Streak action (button or done note)
+      el.streakAction.innerHTML = "";
+      if (studiedToday()) {
+        var note = document.createElement("span");
+        note.className = "done-note";
+        note.textContent = "✓ Studied today";
+        el.streakAction.appendChild(note);
+      } else {
+        var btn = document.createElement("button");
+        btn.className = "btn-primary";
+        btn.textContent = "I studied today";
+        btn.addEventListener("click", markStudiedToday);
+        el.streakAction.appendChild(btn);
+      }
+
+      // Streak weekly bar
+      var days = weekStudyDays();
+      el.weekDays.textContent = days;
+      el.streakFill.style.width = Math.min(100, (days / WEEK_DAYS) * 100) + "%";
+
+      // Words weekly bar
+      var wc = weekWordCount();
+      el.weekWords.textContent = wc;
+      el.wordsFill.style.width = Math.min(100, (wc / WEEKLY_WORD_GOAL) * 100) + "%";
+
+      // Word list (newest first)
+      el.wordList.innerHTML = "";
+      if (state.words.length === 0) {
+        el.wordEmpty.style.display = "block";
+      } else {
+        el.wordEmpty.style.display = "none";
+        // Iterate from the end so newest appears first; keep true index for removal.
+        for (var i = state.words.length - 1; i >= 0; i--) {
+          el.wordList.appendChild(wordRow(state.words[i], i));
+        }
+      }
+    }
+
+    function wordRow(word, index) {
+      var li = document.createElement("li");
+
+      var body = document.createElement("div");
+      body.className = "word-body";
+
+      var line = document.createElement("div");
+      var textSpan = document.createElement("span");
+      textSpan.className = "word-text";
+      textSpan.textContent = word.text;
+      line.appendChild(textSpan);
+
+      if (word.meaning) {
+        var meaningSpan = document.createElement("span");
+        meaningSpan.className = "word-meaning";
+        meaningSpan.textContent = " — " + word.meaning;
+        line.appendChild(meaningSpan);
+      }
+      body.appendChild(line);
+
+      var when = document.createElement("div");
+      when.className = "word-when";
+      when.textContent = relativeWhen(word.addedAt);
+      body.appendChild(when);
+
+      var remove = document.createElement("button");
+      remove.className = "remove";
+      remove.setAttribute("aria-label", "Remove word");
+      remove.title = "Remove";
+      remove.textContent = "×";
+      remove.addEventListener("click", function () { removeWord(index); });
+
+      li.appendChild(body);
+      li.appendChild(remove);
+      return li;
+    }
+
+    /* ---------- wire up ---------- */
+    document.getElementById("word-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var wordInput = document.getElementById("word-input");
+      var meaningInput = document.getElementById("meaning-input");
+      addWord(wordInput.value, meaningInput.value);
+      wordInput.value = "";
+      meaningInput.value = "";
+      wordInput.focus();
+    });
+
+    render();
+  </script>
+</body>
+</html>
