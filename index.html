@@ -144,6 +144,101 @@
       gap: 6px;
     }
 
+    /* Calendar */
+    .cal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .cal-title {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--green-ink);
+    }
+
+    .cal-nav {
+      background: transparent;
+      color: var(--green-deep);
+      font-size: 1.3rem;
+      line-height: 1;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .cal-nav:hover { background: #eef7f0; }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .cal-dow {
+      text-align: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 4px;
+    }
+
+    .cal-cell {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--track);
+    }
+
+    .cal-cell.blank { background: transparent; }
+
+    .cal-cell.logged {
+      background: linear-gradient(145deg, var(--green), var(--green-deep));
+      color: #0f2a1b;
+      box-shadow: 0 4px 10px rgba(61, 220, 132, 0.35);
+    }
+
+    .cal-cell.today {
+      box-shadow: 0 0 0 2px var(--green-deep);
+    }
+
+    .cal-cell.logged.today {
+      box-shadow: 0 0 0 2px var(--green-ink), 0 4px 10px rgba(61, 220, 132, 0.35);
+    }
+
+    .cal-legend {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 16px;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .cal-legend .swatch {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 5px;
+      vertical-align: -2px;
+      margin-right: 6px;
+    }
+
+    .cal-legend .swatch.logged { background: var(--green-deep); }
+    .cal-legend .swatch.none { background: var(--track); }
+
     /* Progress bars */
     .progress {
       margin-top: 22px;
@@ -298,6 +393,20 @@
       <p>Small steps, every day.</p>
     </header>
 
+    <!-- Calendar -->
+    <section class="card">
+      <div class="cal-head">
+        <button class="cal-nav" id="cal-prev" aria-label="Previous month" title="Previous month">‹</button>
+        <h2 class="cal-title" id="cal-title">Month</h2>
+        <button class="cal-nav" id="cal-next" aria-label="Next month" title="Next month">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-legend">
+        <span><span class="swatch logged"></span>Studied</span>
+        <span><span class="swatch none"></span>Not logged</span>
+      </div>
+    </section>
+
     <!-- Streak -->
     <section class="card">
       <h2>Study streak</h2>
@@ -425,6 +534,12 @@
 
     var state = load();
 
+    // First-of-month for the calendar view; starts on the current month.
+    var calMonth = (function () {
+      var now = new Date();
+      return new Date(now.getFullYear(), now.getMonth(), 1);
+    })();
+
     /* ---------- derived values ---------- */
     function studiedToday() {
       return state.lastStudyDate === todayStr();
@@ -497,6 +612,8 @@
 
     /* ---------- render ---------- */
     var el = {
+      calTitle: document.getElementById("cal-title"),
+      calGrid: document.getElementById("cal-grid"),
       streakNumber: document.getElementById("streak-number"),
       streakUnit: document.getElementById("streak-unit"),
       streakAction: document.getElementById("streak-action"),
@@ -508,7 +625,61 @@
       wordEmpty: document.getElementById("word-empty")
     };
 
+    var MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"];
+    var DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]; // Monday-start
+
+    // Build the month grid from the same studyDates that drive the streak.
+    function renderCalendar() {
+      var year = calMonth.getFullYear();
+      var month = calMonth.getMonth();
+      el.calTitle.textContent = MONTH_NAMES[month] + " " + year;
+
+      var logged = {};
+      state.studyDates.forEach(function (d) { logged[d] = true; });
+
+      var today = todayStr();
+      el.calGrid.innerHTML = "";
+
+      // Weekday headers
+      DOW.forEach(function (name) {
+        var head = document.createElement("div");
+        head.className = "cal-dow";
+        head.textContent = name;
+        el.calGrid.appendChild(head);
+      });
+
+      // Leading blanks so day 1 lands under the right weekday (Monday-start).
+      var firstDow = new Date(year, month, 1).getDay(); // 0 = Sun ... 6 = Sat
+      var lead = (firstDow + 6) % 7;
+      for (var b = 0; b < lead; b++) {
+        var blank = document.createElement("div");
+        blank.className = "cal-cell blank";
+        el.calGrid.appendChild(blank);
+      }
+
+      // Day cells
+      var daysInMonth = new Date(year, month + 1, 0).getDate();
+      for (var day = 1; day <= daysInMonth; day++) {
+        var key = dateStr(new Date(year, month, day));
+        var cell = document.createElement("div");
+        cell.className = "cal-cell";
+        if (logged[key]) cell.classList.add("logged");
+        if (key === today) cell.classList.add("today");
+        cell.textContent = day;
+        cell.title = key + (logged[key] ? " — studied" : "");
+        el.calGrid.appendChild(cell);
+      }
+    }
+
+    function shiftMonth(delta) {
+      calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() + delta, 1);
+      renderCalendar();
+    }
+
     function render() {
+      renderCalendar();
+
       // Streak figure
       var shown = displayStreak();
       el.streakNumber.textContent = shown;
@@ -590,6 +761,9 @@
     }
 
     /* ---------- wire up ---------- */
+    document.getElementById("cal-prev").addEventListener("click", function () { shiftMonth(-1); });
+    document.getElementById("cal-next").addEventListener("click", function () { shiftMonth(1); });
+
     document.getElementById("word-form").addEventListener("submit", function (e) {
       e.preventDefault();
       var wordInput = document.getElementById("word-input");

@@ -5,6 +5,8 @@ everything is saved privately in your browser via `localStorage`.
 
 ## Features
 
+- **Calendar** — a month view (with previous/next navigation) that fills in every
+  day you logged a study session, drawn from the same data as the streak.
 - **Study streak** — tap *I studied today* to keep your streak going. The streak
   counts consecutive days and resets if you miss one. A progress bar fills toward
   a 7-day week.
