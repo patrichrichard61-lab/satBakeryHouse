@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Language Tracker</title>
+<style>
+  :root {
+    --green: #3fbf6f;
+    --green-deep: #2fa15a;
+    --green-soft: #e6f6ec;
+    --cream: #f7f4ea;
+    --card: #ffffff;
+    --ink: #274132;
+    --muted: #7d8b82;
+    --line: #ece7d8;
+    --radius: 20px;
+    --shadow: 0 10px 30px rgba(47, 161, 90, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 48px 20px 64px;
+  }
+
+  header.page {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  header.page h1 {
+    margin: 0 0 6px;
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  header.page p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.98rem;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 26px;
+    margin-bottom: 24px;
+  }
+
+  .card h2 {
+    margin: 0 0 4px;
+    font-size: 1.1rem;
+    font-weight: 650;
+  }
+
+  .card .sub {
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  /* Streak display */
+  .streak-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .streak-num {
+    font-size: 3rem;
+    font-weight: 750;
+    color: var(--green-deep);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .streak-label {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  /* Buttons */
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: transform 0.06s ease, background 0.15s ease, opacity 0.15s ease;
+  }
+
+  button:active { transform: scale(0.98); }
+
+  .btn-primary {
+    background: var(--green);
+    color: #fff;
+    padding: 12px 20px;
+  }
+  .btn-primary:hover { background: var(--green-deep); }
+  .btn-primary:disabled {
+    background: var(--green-soft);
+    color: var(--green-deep);
+    cursor: default;
+    opacity: 0.9;
+  }
+
+  /* Progress bar */
+  .progress {
+    margin-top: 4px;
+  }
+  .progress .meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .progress .track {
+    height: 12px;
+    background: var(--green-soft);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress .fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--green), var(--green-deep));
+    border-radius: 999px;
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Word input */
+  .word-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .word-form input {
+    flex: 1 1 140px;
+    min-width: 0;
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 12px 14px;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    background: #fcfbf6;
+    color: var(--ink);
+    transition: border-color 0.15s ease;
+  }
+  .word-form input:focus {
+    outline: none;
+    border-color: var(--green);
+    background: #fff;
+  }
+  .word-form button { flex: 0 0 auto; }
+
+  ul.words {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+  }
+  ul.words li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 4px;
+    border-top: 1px solid var(--line);
+  }
+  ul.words li:last-child { border-bottom: 1px solid var(--line); }
+  .w-text { flex: 1; min-width: 0; }
+  .w-word { font-weight: 600; }
+  .w-mean { color: var(--muted); font-size: 0.9rem; }
+  .w-when {
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .w-del {
+    background: transparent;
+    color: var(--muted);
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 6px 8px;
+    border-radius: 8px;
+  }
+  .w-del:hover { background: #fbeaea; color: #c0392b; }
+
+  .empty {
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 18px 0 6px;
+  }
+
+  @media (max-width: 420px) {
+    .wrap { padding: 32px 16px 48px; }
+    .streak-num { font-size: 2.6rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page">
+      <h1>🌱 Language Tracker</h1>
+      <p>A quiet space to keep your study streak and words growing.</p>
+    </header>
+
+    <!-- Streak -->
+    <section class="card">
+      <h2>Study streak</h2>
+      <p class="sub">Mark each day you study to keep the chain going.</p>
+      <div class="streak-row">
+        <span class="streak-num" id="streakNum">0</span>
+        <span class="streak-label" id="streakLabel">day streak</span>
+      </div>
+      <button class="btn-primary" id="markBtn">Mark today as studied</button>
+      <div class="progress" style="margin-top:22px;">
+        <div class="meta">
+          <span>This week</span>
+          <span id="weekDaysMeta">0 / 7 days</span>
+        </div>
+        <div class="track"><div class="fill" id="daysFill"></div></div>
+      </div>
+    </section>
+
+    <!-- Words -->
+    <section class="card">
+      <h2>New words</h2>
+      <p class="sub">Weekly goal: 20 new words.</p>
+      <form class="word-form" id="wordForm">
+        <input type="text" id="wordInput" placeholder="New word" autocomplete="off" />
+        <input type="text" id="meaningInput" placeholder="Meaning / translation" autocomplete="off" />
+        <button type="submit" class="btn-primary">Add</button>
+      </form>
+      <ul class="words" id="wordList"></ul>
+      <div class="progress">
+        <div class="meta">
+          <span>This week</span>
+          <span id="wordsMeta">0 / 20 words</span>
+        </div>
+        <div class="track"><div class="fill" id="wordsFill"></div></div>
+      </div>
+    </section>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "langTracker";
+  var WEEK_DAY_GOAL = 7;
+  var WEEK_WORD_GOAL = 20;
+
+  // ---- Storage ----
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { studyDays: [], words: [] };
+      var data = JSON.parse(raw);
+      return {
+        studyDays: Array.isArray(data.studyDays) ? data.studyDays : [],
+        words: Array.isArray(data.words) ? data.words : []
+      };
+    } catch (e) {
+      return { studyDays: [], words: [] };
+    }
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* storage full or unavailable — ignore */ }
+  }
+
+  // ---- Date helpers (local time) ----
+  function toISO(d) {
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + day;
+  }
+
+  function todayISO() { return toISO(new Date()); }
+
+  // Days difference between two ISO date strings (a - b) in whole days.
+  function dayDiff(aISO, bISO) {
+    var a = new Date(aISO + "T00:00:00");
+    var b = new Date(bISO + "T00:00:00");
+    return Math.round((a - b) / 86400000);
+  }
+
+  // Monday as start of the week.
+  function startOfWeekISO() {
+    var d = new Date();
+    var dow = (d.getDay() + 6) % 7; // 0 = Monday
+    d.setDate(d.getDate() - dow);
+    return toISO(d);
+  }
+
+  // ---- Computations ----
+  function computeStreak() {
+    if (!state.studyDays.length) return 0;
+    var set = {};
+    state.studyDays.forEach(function (d) { set[d] = true; });
+
+    var today = todayISO();
+    var start;
+    if (set[today]) start = today;
+    else {
+      var y = new Date();
+      y.setDate(y.getDate() - 1);
+      var yISO = toISO(y);
+      if (set[yISO]) start = yISO; // grace: streak alive until end of today
+      else return 0;
+    }
+
+    var count = 0;
+    var cursor = new Date(start + "T00:00:00");
+    while (set[toISO(cursor)]) {
+      count++;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    return count;
+  }
+
+  function studyDaysThisWeek() {
+    var start = startOfWeekISO();
+    var seen = {};
+    state.studyDays.forEach(function (d) {
+      if (dayDiff(d, start) >= 0 && dayDiff(d, start) < 7) seen[d] = true;
+    });
+    return Object.keys(seen).length;
+  }
+
+  function wordsThisWeek() {
+    var start = startOfWeekISO();
+    return state.words.filter(function (w) {
+      var dISO = (w.addedAt || "").slice(0, 10);
+      return dISO && dayDiff(dISO, start) >= 0 && dayDiff(dISO, start) < 7;
+    }).length;
+  }
+
+  // ---- Rendering ----
+  function pct(value, goal) {
+    return Math.max(0, Math.min(100, (value / goal) * 100));
+  }
+
+  function relWhen(iso) {
+    var dISO = (iso || "").slice(0, 10);
+    if (!dISO) return "";
+    var diff = dayDiff(todayISO(), dISO);
+    if (diff <= 0) return "today";
+    if (diff === 1) return "yesterday";
+    if (diff < 7) return diff + "d ago";
+    return dISO.slice(5); // MM-DD
+  }
+
+  function render() {
+    var streak = computeStreak();
+    el.streakNum.textContent = streak;
+    el.streakLabel.textContent = streak === 1 ? "day streak" : "day streak";
+
+    var weekDays = studyDaysThisWeek();
+    el.weekDaysMeta.textContent = weekDays + " / " + WEEK_DAY_GOAL + " days";
+    el.daysFill.style.width = pct(weekDays, WEEK_DAY_GOAL) + "%";
+
+    var studiedToday = state.studyDays.indexOf(todayISO()) !== -1;
+    el.markBtn.disabled = studiedToday;
+    el.markBtn.textContent = studiedToday ? "✓ Studied today" : "Mark today as studied";
+
+    // Words
+    el.wordList.innerHTML = "";
+    if (!state.words.length) {
+      var empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "No words yet — add your first one above.";
+      el.wordList.appendChild(empty);
+    } else {
+      var ordered = state.words.slice().sort(function (a, b) {
+        return (b.addedAt || "").localeCompare(a.addedAt || "");
+      });
+      ordered.forEach(function (w) {
+        var li = document.createElement("li");
+
+        var text = document.createElement("div");
+        text.className = "w-text";
+        var word = document.createElement("span");
+        word.className = "w-word";
+        word.textContent = w.word;
+        text.appendChild(word);
+        if (w.meaning) {
+          var mean = document.createElement("span");
+          mean.className = "w-mean";
+          mean.textContent = " — " + w.meaning;
+          text.appendChild(mean);
+        }
+
+        var when = document.createElement("span");
+        when.className = "w-when";
+        when.textContent = relWhen(w.addedAt);
+
+        var del = document.createElement("button");
+        del.className = "w-del";
+        del.type = "button";
+        del.setAttribute("aria-label", "Remove word");
+        del.textContent = "×";
+        del.addEventListener("click", function () { removeWord(w.id); });
+
+        li.appendChild(text);
+        li.appendChild(when);
+        li.appendChild(del);
+        el.wordList.appendChild(li);
+      });
+    }
+
+    var weekWords = wordsThisWeek();
+    el.wordsMeta.textContent = weekWords + " / " + WEEK_WORD_GOAL + " words";
+    el.wordsFill.style.width = pct(weekWords, WEEK_WORD_GOAL) + "%";
+  }
+
+  // ---- Actions ----
+  function markToday() {
+    var t = todayISO();
+    if (state.studyDays.indexOf(t) === -1) {
+      state.studyDays.push(t);
+      save();
+      render();
+    }
+  }
+
+  function addWord(word, meaning) {
+    state.words.push({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+      word: word,
+      meaning: meaning,
+      addedAt: new Date().toISOString()
+    });
+    save();
+    render();
+  }
+
+  function removeWord(id) {
+    state.words = state.words.filter(function (w) { return w.id !== id; });
+    save();
+    render();
+  }
+
+  // ---- Wiring ----
+  var state = load();
+  var el = {
+    streakNum: document.getElementById("streakNum"),
+    streakLabel: document.getElementById("streakLabel"),
+    weekDaysMeta: document.getElementById("weekDaysMeta"),
+    daysFill: document.getElementById("daysFill"),
+    markBtn: document.getElementById("markBtn"),
+    wordForm: document.getElementById("wordForm"),
+    wordInput: document.getElementById("wordInput"),
+    meaningInput: document.getElementById("meaningInput"),
+    wordList: document.getElementById("wordList"),
+    wordsMeta: document.getElementById("wordsMeta"),
+    wordsFill: document.getElementById("wordsFill")
+  };
+
+  el.markBtn.addEventListener("click", markToday);
+
+  el.wordForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var word = el.wordInput.value.trim();
+    var meaning = el.meaningInput.value.trim();
+    if (!word) { el.wordInput.focus(); return; }
+    addWord(word, meaning);
+    el.wordInput.value = "";
+    el.meaningInput.value = "";
+    el.wordInput.focus();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
