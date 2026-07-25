@@ -73,6 +73,72 @@
     font-size: 0.9rem;
   }
 
+  /* Calendar */
+  .cal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .cal-title {
+    font-size: 1rem;
+    font-weight: 650;
+  }
+  .cal-nav {
+    display: flex;
+    gap: 6px;
+  }
+  .cal-nav button {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--green-soft);
+    color: var(--green-deep);
+    font-size: 1.1rem;
+    line-height: 1;
+    border-radius: 10px;
+  }
+  .cal-nav button:hover { background: #d6efdf; }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+  .cal-dow {
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding-bottom: 2px;
+  }
+  .cal-cell {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    border-radius: 10px;
+    background: #fbfaf4;
+  }
+  .cal-cell.empty { background: transparent; }
+  .cal-cell.logged {
+    background: linear-gradient(135deg, var(--green), var(--green-deep));
+    color: #fff;
+    font-weight: 600;
+  }
+  .cal-cell.today {
+    box-shadow: inset 0 0 0 2px var(--green);
+  }
+  .cal-cell.logged.today {
+    box-shadow: inset 0 0 0 2px var(--green-deep);
+  }
+
   /* Streak display */
   .streak-row {
     display: flex;
@@ -221,6 +287,18 @@
       <h1>🌱 Language Tracker</h1>
       <p>A quiet space to keep your study streak and words growing.</p>
     </header>
+
+    <!-- Calendar -->
+    <section class="card">
+      <div class="cal-head">
+        <span class="cal-title" id="calTitle">Month</span>
+        <div class="cal-nav">
+          <button type="button" id="calPrev" aria-label="Previous month">‹</button>
+          <button type="button" id="calNext" aria-label="Next month">›</button>
+        </div>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </section>
 
     <!-- Streak -->
     <section class="card">
@@ -372,7 +450,48 @@
     return dISO.slice(5); // MM-DD
   }
 
+  var MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+  var DOW = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+
+  function renderCalendar() {
+    var set = {};
+    state.studyDays.forEach(function (d) { set[d] = true; });
+    var today = todayISO();
+
+    el.calTitle.textContent = MONTH_NAMES[view.month] + " " + view.year;
+    el.calGrid.innerHTML = "";
+
+    DOW.forEach(function (label) {
+      var h = document.createElement("div");
+      h.className = "cal-dow";
+      h.textContent = label;
+      el.calGrid.appendChild(h);
+    });
+
+    var first = new Date(view.year, view.month, 1);
+    var offset = (first.getDay() + 6) % 7; // Monday-based leading blanks
+    var daysInMonth = new Date(view.year, view.month + 1, 0).getDate();
+
+    for (var i = 0; i < offset; i++) {
+      var blank = document.createElement("div");
+      blank.className = "cal-cell empty";
+      el.calGrid.appendChild(blank);
+    }
+
+    for (var day = 1; day <= daysInMonth; day++) {
+      var iso = toISO(new Date(view.year, view.month, day));
+      var cell = document.createElement("div");
+      cell.className = "cal-cell";
+      if (set[iso]) cell.className += " logged";
+      if (iso === today) cell.className += " today";
+      cell.textContent = day;
+      el.calGrid.appendChild(cell);
+    }
+  }
+
   function render() {
+    renderCalendar();
     var streak = computeStreak();
     el.streakNum.textContent = streak;
     el.streakLabel.textContent = streak === 1 ? "day streak" : "day streak";
@@ -464,7 +583,13 @@
 
   // ---- Wiring ----
   var state = load();
+  var now = new Date();
+  var view = { year: now.getFullYear(), month: now.getMonth() };
   var el = {
+    calTitle: document.getElementById("calTitle"),
+    calGrid: document.getElementById("calGrid"),
+    calPrev: document.getElementById("calPrev"),
+    calNext: document.getElementById("calNext"),
     streakNum: document.getElementById("streakNum"),
     streakLabel: document.getElementById("streakLabel"),
     weekDaysMeta: document.getElementById("weekDaysMeta"),
@@ -477,6 +602,15 @@
     wordsMeta: document.getElementById("wordsMeta"),
     wordsFill: document.getElementById("wordsFill")
   };
+
+  function shiftMonth(delta) {
+    var m = view.month + delta;
+    view.year += Math.floor(m / 12);
+    view.month = ((m % 12) + 12) % 12;
+    renderCalendar();
+  }
+  el.calPrev.addEventListener("click", function () { shiftMonth(-1); });
+  el.calNext.addEventListener("click", function () { shiftMonth(1); });
 
   el.markBtn.addEventListener("click", markToday);
 
