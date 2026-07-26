@@ -534,6 +534,26 @@
 
     var state = load();
 
+    // Durably record a study day for every day a word was logged, so removing a
+    // word later never drops that day from the streak or calendar. Runs once at
+    // load to heal existing data; addWord() keeps it current thereafter.
+    function reconcileStudyDays() {
+      var changed = false;
+      state.words.forEach(function (w) {
+        var d = dateStr(new Date(w.addedAt));
+        if (state.studyDates.indexOf(d) === -1) {
+          state.studyDates.push(d);
+          changed = true;
+        }
+      });
+      if (state.studyDates.length > 200) {
+        state.studyDates = state.studyDates.slice(-200);
+        changed = true;
+      }
+      return changed;
+    }
+    if (reconcileStudyDays()) save();
+
     // First-of-month for the calendar view; starts on the current month.
     var calMonth = (function () {
       var now = new Date();
@@ -599,6 +619,7 @@
         meaning: meaning.trim(),
         addedAt: new Date().toISOString()
       });
+      reconcileStudyDays(); // durably mark today so deleting this word won't undo the streak
       save();
       render();
     }
