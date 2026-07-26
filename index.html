@@ -410,7 +410,7 @@
     <!-- Streak -->
     <section class="card">
       <h2>Study streak</h2>
-      <p class="sub">Tap “I studied today” to count today — adding words doesn’t count toward your streak.</p>
+      <p class="sub">Adding a word or tapping “I studied today” both count today toward your streak.</p>
       <div class="streak-row">
         <div class="streak-figure">
           <span class="streak-number" id="streak-number">0</span>
@@ -430,7 +430,7 @@
     <!-- Words -->
     <section class="card">
       <h2>New words this week</h2>
-      <p class="sub">Goal: 20 new words each week. Resets every Monday. Counts toward your weekly goal, not your streak.</p>
+      <p class="sub">Goal: 20 new words each week. Resets every Monday. Each word also counts as today’s study day.</p>
       <form class="word-form" id="word-form">
         <input type="text" id="word-input" placeholder="New word" autocomplete="off" />
         <input type="text" id="meaning-input" placeholder="Meaning (optional)" autocomplete="off" />
@@ -541,16 +541,32 @@
     })();
 
     /* ---------- derived values ---------- */
+    // The set of days that count as "studied": explicit "I studied today" days
+    // plus any day a word was logged (a logged word is a study session). This is
+    // the single source of truth for the streak and the calendar, so past word
+    // entries count automatically — no migration needed. Keyed YYYY-MM-DD (local).
+    function studyDaySet() {
+      var set = {};
+      state.studyDates.forEach(function (d) { set[d] = true; });
+      state.words.forEach(function (w) { set[dateStr(new Date(w.addedAt))] = true; });
+      return set;
+    }
+
+    function shiftDay(str, delta) {
+      var d = parseDate(str);
+      d.setDate(d.getDate() + delta);
+      return dateStr(d);
+    }
+
     function studiedToday() {
-      return state.lastStudyDate === todayStr();
+      return !!studyDaySet()[todayStr()];
     }
 
     function weekStudyDays() {
-      var seen = {};
-      state.studyDates.forEach(function (d) {
-        if (isThisWeek(d)) seen[d] = true;
-      });
-      return Object.keys(seen).length;
+      var set = studyDaySet();
+      var count = 0;
+      Object.keys(set).forEach(function (d) { if (isThisWeek(d)) count++; });
+      return count;
     }
 
     function weekWordCount() {
@@ -560,22 +576,16 @@
     }
 
     /* ---------- actions ---------- */
+    // Records today as a study day for days you studied without adding a word.
+    // The streak itself is derived from studyDaySet(), so this just marks the day.
     function markStudiedToday() {
       var today = todayStr();
-      if (state.lastStudyDate === today) return; // already marked
-
-      if (state.lastStudyDate && dayDiff(today, state.lastStudyDate) === 1) {
-        state.streak += 1; // consecutive day
-      } else {
-        state.streak = 1; // first day or streak broken
-      }
-      state.lastStudyDate = today;
       if (state.studyDates.indexOf(today) === -1) {
         state.studyDates.push(today);
-      }
-      // Keep studyDates from growing forever: retain only the last ~120 days.
-      if (state.studyDates.length > 200) {
-        state.studyDates = state.studyDates.slice(-200);
+        // Keep studyDates from growing forever: retain only the most recent entries.
+        if (state.studyDates.length > 200) {
+          state.studyDates = state.studyDates.slice(-200);
+        }
       }
       save();
       render();
@@ -599,15 +609,24 @@
       render();
     }
 
-    /* ---------- streak-break reconciliation ----------
-       If the user opens the app after missing a day, the displayed streak
-       should reflect reality: a streak only counts if today or yesterday
-       was studied. Otherwise it has lapsed and reads as 0 until they log again. */
+    /* ---------- streak from study days ----------
+       Counts the consecutive run of study days ending today (or yesterday, so a
+       streak stays alive until a full day is missed). Derived live from
+       studyDaySet(), so logging a word yesterday makes today's streak read
+       correctly and a missed day resets it to 0 automatically. */
     function displayStreak() {
-      if (!state.lastStudyDate) return 0;
-      var gap = dayDiff(todayStr(), state.lastStudyDate);
-      if (gap <= 1) return state.streak; // today or yesterday
-      return 0; // lapsed
+      var set = studyDaySet();
+      var cursor = todayStr();
+      if (!set[cursor]) {
+        cursor = shiftDay(cursor, -1); // allow the streak to anchor on yesterday
+        if (!set[cursor]) return 0;    // lapsed: neither today nor yesterday
+      }
+      var count = 0;
+      while (set[cursor]) {
+        count++;
+        cursor = shiftDay(cursor, -1);
+      }
+      return count;
     }
 
     /* ---------- render ---------- */
@@ -629,14 +648,13 @@
       "July", "August", "September", "October", "November", "December"];
     var DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]; // Monday-start
 
-    // Build the month grid from the same studyDates that drive the streak.
+    // Build the month grid from the same study-day set that drives the streak.
     function renderCalendar() {
       var year = calMonth.getFullYear();
       var month = calMonth.getMonth();
       el.calTitle.textContent = MONTH_NAMES[month] + " " + year;
 
-      var logged = {};
-      state.studyDates.forEach(function (d) { logged[d] = true; });
+      var logged = studyDaySet();
 
       var today = todayStr();
       el.calGrid.innerHTML = "";
