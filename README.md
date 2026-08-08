@@ -14,6 +14,14 @@ everything is saved privately in your browser via `localStorage`.
   goal of 20. The weekly count resets every Monday; your word list stays.
 - **Progress bars** under each section show how the week is going at a glance.
 
+## Bundled study set
+
+The tracker ships with a set of CIT421 (Net-Centric Computing) past-exam Q&A
+entries that are merged into your word list once, the first time you open it.
+These reference entries count toward the weekly-goal bar but are deliberately
+excluded from the study streak and calendar, and deleting them is permanent
+(they are not re-added on reload).
+
 ## Usage
 
 Open `index.html` in any modern browser — double-click it, or serve the folder
