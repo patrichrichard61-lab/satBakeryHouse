@@ -1,0 +1,27 @@
+{
+  "extraKnownMarketplaces": {
+    "knowledge-work-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/knowledge-work-plugins"
+      }
+    },
+    "claude-tag-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-tag-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "small-business@knowledge-work-plugins": true,
+    "engineering@knowledge-work-plugins": true,
+    "marketing@knowledge-work-plugins": true,
+    "brand-voice@knowledge-work-plugins": true,
+    "design@knowledge-work-plugins": true,
+    "linear@claude-tag-plugins": true,
+    "notion@claude-tag-plugins": true,
+    "google-drive@claude-tag-plugins": true,
+    "salesforce@claude-tag-plugins": true
+  }
+}
