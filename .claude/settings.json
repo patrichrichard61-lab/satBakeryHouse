@@ -9,6 +9,7 @@
   },
   "enabledPlugins": {
     "small-business@knowledge-work-plugins": true,
+    "engineering@knowledge-work-plugins": true,
     "marketing@knowledge-work-plugins": true,
     "brand-voice@knowledge-work-plugins": true,
     "design@knowledge-work-plugins": true
